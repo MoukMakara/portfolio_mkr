@@ -1,0 +1,268 @@
+@import "tailwindcss";
+
+/* `dark:` utilities follow the data-theme attribute set on <html> (see ThemeScript). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---------- Theme tokens ----------
+   Every color is a CSS variable so one data-theme attribute switches the whole site.
+   A nested element with data-theme="dark" (e.g. the code editor) keeps the dark palette. */
+:root,
+[data-theme="dark"] {
+  --bg: #06070a;
+  --surface: #0d0f14;
+  --surface-2: #141720;
+  --fg: #f2f3f6;
+  --muted: #a3a7b3;
+  --subtle: #737885;
+  --line: rgb(255 255 255 / 0.075);
+  --line-strong: rgb(255 255 255 / 0.14);
+  --accent: #6b9bff;
+  --ai: #a78bfa;
+  --cyan: #22d3ee;
+  --grad-text: linear-gradient(100deg, #ffffff 0%, #c7d4ff 40%, #c4b5fd 70%, #ffffff 100%);
+  --grad-accent: linear-gradient(90deg, #6b9bff, #a78bfa, #f0abfc, #6b9bff);
+  --orb-opacity: 0.55;
+  --grid-color: rgb(255 255 255 / 0.05);
+  --noise-opacity: 0.05;
+  --shadow-color: rgb(0 0 0 / 0.45);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #f6f7fb;
+  --surface: #ffffff;
+  --surface-2: #f0f2f8;
+  --fg: #0c1222;
+  --muted: #4a5266;
+  --subtle: #6b7385;
+  --line: rgb(15 23 42 / 0.08);
+  --line-strong: rgb(15 23 42 / 0.15);
+  --accent: #3a66f0;
+  --ai: #7c4dff;
+  --cyan: #0891b2;
+  --grad-text: linear-gradient(100deg, #0c1222 0%, #2f4fd8 45%, #7c4dff 75%, #0c1222 100%);
+  --grad-accent: linear-gradient(90deg, #3a66f0, #7c4dff, #db2777, #3a66f0);
+  --orb-opacity: 0.35;
+  --grid-color: rgb(15 23 42 / 0.06);
+  --noise-opacity: 0.035;
+  --shadow-color: rgb(15 23 42 / 0.12);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-ai: var(--ai);
+  --color-cyan: var(--cyan);
+  --color-shade: var(--shadow-color);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@theme {
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+  --animate-orb: orb 22s ease-in-out infinite alternate;
+  --animate-flow: flow 2.4s ease-in-out infinite;
+  --animate-blink: blink 1s step-end infinite;
+  --animate-beam: beam 8s linear infinite;
+
+  @keyframes beam {
+    0% {
+      transform: translateY(-10vh);
+      opacity: 0;
+    }
+    10%,
+    80% {
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(90vh);
+      opacity: 0;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes orb {
+    0% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(8vw, 6vh, 0) scale(1.15);
+    }
+    100% {
+      transform: translate3d(-6vw, 10vh, 0) scale(0.95);
+    }
+  }
+  @keyframes flow {
+    0% {
+      top: -10%;
+      opacity: 0;
+    }
+    30%,
+    70% {
+      opacity: 1;
+    }
+    100% {
+      top: 110%;
+      opacity: 0;
+    }
+  }
+}
+
+/* Declared outside @theme so they are always emitted (used directly by utilities below). */
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+
+  @media (width >= 40rem) {
+    padding-inline: 2rem;
+  }
+}
+
+/* Headline gradient with a slow moving sheen. */
+@utility text-gradient {
+  background-image: var(--grad-text);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s linear infinite;
+}
+
+/* Colorful accent gradient (blue → violet → pink) that slowly flows. */
+@utility text-gradient-accent {
+  background-image: var(--grad-accent);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s linear infinite;
+}
+
+/* Base card: thin border with a faint top highlight. */
+@utility card {
+  position: relative;
+  border-radius: 1rem;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--fg) 3.5%, transparent), transparent 40%),
+    var(--surface);
+  box-shadow: 0 1px 2px var(--shadow-color);
+}
+
+/* Faint engineering grid. */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 75% 65% at 50% 35%, black 25%, transparent 75%);
+}
+
+/* Dot pattern used by the page background. */
+.bg-dots {
+  background-image: radial-gradient(var(--grid-color) 1.2px, transparent 1.2px);
+  background-size: 22px 22px;
+}
+
+/* Film grain for depth. */
+.bg-noise {
+  opacity: var(--noise-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Cursor-following highlight, positioned by SpotlightCard via --x / --y. */
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(
+    420px circle at var(--x, 50%) var(--y, 50%),
+    rgb(var(--spot, 107 155 255) / 0.12),
+    transparent 45%
+  );
+}
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Edges fade out so marquee items appear and disappear softly. */
+.mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
